@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable{
 
-    static final int width = 320; //px
-    static final int height = 650;
+    static final int width = 240;//320; //px
+    static final int height = 440;//650;
 
     Tower tower;
     Block block;
@@ -17,13 +17,18 @@ public class GamePanel extends JPanel implements Runnable{
     ActionListener al;
     MyKeyListener kl;
 
+    Board b;
+    BoardDrafter dB;
+
     GamePanel() {
         this.setPreferredSize(new Dimension(width,height));
 
         tower = new Tower();
         tower.fill_rows();
-
         generate_block();
+
+        b= new Board();
+        dB = new BoardDrafter(b);
 
         kl = new MyKeyListener();
         this.addKeyListener(kl);
@@ -96,8 +101,10 @@ public class GamePanel extends JPanel implements Runnable{
         g.setColor(new Color(48,18,38));
         g.fillRect(0,0,width,height);
 
-        tower.draw(g);
-        block.draw(g);
+        Graphics2D g2d = (Graphics2D) g;
+        dB.drawBoard(g2d);
+      //  tower.draw(g);
+      //  block.draw(g);
     }
 
     @Override
@@ -114,8 +121,8 @@ public class GamePanel extends JPanel implements Runnable{
             lastTime = now;
             if(delta >= 1)
             {
-                move();
-                check_collisions();
+              //  move();
+              //  check_collisions();
                 repaint();
                 delta--;
             }

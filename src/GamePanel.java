@@ -7,11 +7,8 @@ import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable{
 
-    static final int width = 240;//320; //px
-    static final int height = 440;//650;
-
-    Tower tower;
-    Block block;
+    static final int width = 360;//320; //px
+    static final int height = 660;//650;
 
     Thread main;
     ActionListener al;
@@ -19,16 +16,15 @@ public class GamePanel extends JPanel implements Runnable{
 
     Board b;
     BoardDrafter dB;
+    BoardEditor eB;
 
     GamePanel() {
         this.setPreferredSize(new Dimension(width,height));
 
-        tower = new Tower();
-        tower.fill_rows();
-        generate_block();
-
         b= new Board();
         dB = new BoardDrafter(b);
+        eB = new BoardEditor(b);
+        eB.make_new_piece();
 
         kl = new MyKeyListener();
         this.addKeyListener(kl);
@@ -39,62 +35,6 @@ public class GamePanel extends JPanel implements Runnable{
         main.start();
     }
 
-    private void move()
-    {
-        block.move();
-    }
-
-    private void check_collisions()
-    {
-        boolean collision = false;
-        int q = 0;
-        while (!collision && q < 4)
-        {
-            if(block.plane[q].y >= (Tower.max_height-4)*Square.len+Tower.tower_offset)
-                {
-                    System.out.print("collololo");
-                    collision = true;
-                    for(int w = 0; w < block.plane.length; w++)
-                        tower.rows[(((block.plane[w].y-Square.len-Tower.tower_offset))/Square.len)+4][(block.plane[w].x-Tower.tower_offset)/Square.len].set_active(); //[h or y][w or x]
-
-                    generate_block();
-                }
-
-
-            int e = Tower.max_height-1;
-            while(e > 2 && !collision)
-            {
-                if(block.plane[q].y == tower.rows[e][(block.plane[q].x-Tower.tower_offset)/Square.len].y && tower.rows[e][(block.plane[q].x-Tower.tower_offset)/Square.len].is_active)
-                {
-                    collision = true;
-                    for(int w = 0; w < block.plane.length; w++)
-                        tower.rows[(((block.plane[w].y-Square.len-Tower.tower_offset))/Square.len)+4][(block.plane[w].x-Tower.tower_offset)/Square.len].set_active(); //[h or y][w or x]
-
-                    generate_block();
-                }
-                e--;
-            }
-            q++;
-        }
-        //after move operation?
-        //if any cube from block is overlaping with any active tower's cube or is on the bottom
-        //all cubes of the block (-Square.len) become active tower's Squares
-        //Delete Block and generate new one.
-    }
-
-    private void generate_block()
-    {
-        Random rd;
-        rd = new Random();
-
-        block = new Block(rd.nextInt(4),rd.nextInt(Tower.max_width-2));
-    }
-
-    private void check_rows()
-    {
-        //if any row is full of active cubes, lower every row over it
-        //increase score
-    }
 
     @Override
     public void paint(Graphics g) {
@@ -103,8 +43,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2d = (Graphics2D) g;
         dB.drawBoard(g2d);
-      //  tower.draw(g);
-      //  block.draw(g);
+
     }
 
     @Override
@@ -121,8 +60,7 @@ public class GamePanel extends JPanel implements Runnable{
             lastTime = now;
             if(delta >= 1)
             {
-              //  move();
-              //  check_collisions();
+                eB.move(0,1);
                 repaint();
                 delta--;
             }
@@ -138,27 +76,45 @@ public class GamePanel extends JPanel implements Runnable{
 
         @Override
         public void keyPressed(KeyEvent e) {
-            switch (e.getKeyChar())
+            switch (e.getKeyCode())
             {
-                case 'q' ->
+                case 65: case 37:
                         {
-                            block.rotate('L');
+                            eB.move(-1, 0);
+                            repaint();
+                            break;
                         }
-                case 'e' ->
+                case 68: case 39:
                         {
-                            block.rotate('R');
+                            eB.move(1, 0);
+                            repaint();
+                            break;
                         }
-                case 's' ->
+                case 82: case 38 :
                         {
-                            block.speed_up(true);
+                            eB.rotate();
+                            repaint();
+                            //block.rotate('L');
+                            break;
+                        }
+//                case 'e' :
+//                        {
+//                            block.rotate('R');
+//                            break;
+//                        }
+                case 40: case 83 :
+                        {
+                            eB.fall();
+                            //TO DO
+                           // block.speed_up(true);
+                            break;
                         }
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            if(e.getKeyChar() == 's')
-                block.speed_up(false);
+
         }
     }
 

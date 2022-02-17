@@ -12,14 +12,14 @@ public class Screen extends JFrame {
 
         this.setSize(new Dimension(gP.getWidth(), gP.getHeight()));
         this.setResizable(false);
-  //      this.setAlwaysOnTop(true);
         this.setVisible(true);
         this.setEnabled(true);
-        this.setLocationRelativeTo(null);
+
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         this.add(gP);
         this.pack();
+        this.setLocationRelativeTo(null);
     }
 
 }

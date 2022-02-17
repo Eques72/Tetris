@@ -16,7 +16,7 @@ public class BoardEditor {
     public void make_new_piece() //(int x, int y, char type)
     {
         Random rd = new Random();
-        piece = new Pieces(rd.nextInt(8)+1,0, piece.types[rd.nextInt(3)]);
+        piece = new Pieces(rd.nextInt(8)+1,0, piece.types[rd.nextInt(7)]);
         insert_piece();
     }
 
@@ -25,30 +25,37 @@ public class BoardEditor {
         for(int i = 0; i < piece.matrix.length; i++)
             for(int j = 0; j < piece.matrix[i].length; j++)
                 if(piece.matrix[i][j] == 1)
-                    board.map[j+i*board.boardWidth+ piece.x+piece.y*board.boardWidth] = '%';
+                    board.map[j+i*board.boardWidth+ piece.x+piece.y*board.boardWidth] = piece_sym;
+    }
+
+    public void clear_piece()
+    {
+        for(int i = 0; i < piece.matrix.length; i++)
+            for(int j = 0; j < piece.matrix[i].length; j++)
+                if(piece.matrix[i][j] == 1)
+                    board.map[j+i*board.boardWidth+ piece.x+piece.y*board.boardWidth] = empty_sym;
     }
 
     public boolean move(int x, int y)
     {
-
-
-
-        if(collisions(x,y)){
+        if(collisions(x,y))
+        {
             x = 0; y = 0;
-            removeLine();
             return false;
-        }    //TO DO, triggers creation of new el and blends old permanently into board
+        }
+            clear_piece();
 
-            for(int i = 0; i < piece.matrix.length; i++)
-                for(int j = 0; j < piece.matrix[i].length; j++)
-                    if(piece.matrix[i][j] == 1)
-                        board.map[j+i*board.boardWidth+ piece.x+piece.y*board.boardWidth] = ' ';
             piece.move(x, y);
             insert_piece();
             return true;
     }
 
-    public void rotate(){}
+    public void rotate()
+    {
+        clear_piece();
+        piece.rotate();
+        insert_piece();
+    }
 
     public void fall()
     {
@@ -65,9 +72,9 @@ public class BoardEditor {
             int rows = (index - 1) / board.boardWidth - 1;
             for (int j = rows; j > 0; j--)
                 for (int i = 10; i > 0; i--)
-                    if (board.map[j* board.boardWidth+i] == '%')
+                    if (board.map[j* board.boardWidth+i] == piece_sym)
                     {
-                        board.map[j * board.boardWidth + i + board.boardWidth] = '%';
+                        board.map[j * board.boardWidth + i + board.boardWidth] = piece_sym;
                         board.map[j* board.boardWidth+i] = ' ';
                     }
         }
@@ -84,10 +91,11 @@ public class BoardEditor {
                 int[] coll_tab = piece.getLowerBlocks();
                 for(int q = 0; q < coll_tab.length; q++)
                     if(coll_tab[q] != -1 &&
-                            ( board.map[(piece.y+coll_tab[q]+y)*board.boardWidth+(piece.x+q)] == '%'
-                                || board.map[(piece.y+coll_tab[q]+y)*board.boardWidth+(piece.x+q)] == '#') )
+                            ( board.map[(piece.y+coll_tab[q]+y)*board.boardWidth+(piece.x+q)] == piece_sym
+                                || board.map[(piece.y+coll_tab[q]+y)*board.boardWidth+(piece.x+q)] == border_sym) )
                     {
                         insert_piece();
+                        removeLine();
                         make_new_piece();
                         return true;
                     }

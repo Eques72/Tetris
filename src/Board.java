@@ -1,7 +1,7 @@
 public class Board
 {
 //    private String map_str =   "############" +
-public String str_map =     "############" +
+private String str_map =     "############" +
                             "#          #" +
                             "#          #" +
                             "#          #" +

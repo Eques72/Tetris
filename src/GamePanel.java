@@ -90,18 +90,12 @@ public class GamePanel extends JPanel implements Runnable{
                             repaint();
                             break;
                         }
-                case 82: case 38 :
+                case 87: case 38 :
                         {
                             eB.rotate();
                             repaint();
-                            //block.rotate('L');
                             break;
                         }
-//                case 'e' :
-//                        {
-//                            block.rotate('R');
-//                            break;
-//                        }
                 case 40: case 83 :
                         {
                             eB.fall();

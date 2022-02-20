@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -17,6 +18,7 @@ public class GamePanel extends JPanel implements Runnable{
     Board b;
     BoardDrafter dB;
     BoardEditor eB;
+    RetryPanel rP;
 
     GamePanel() {
         this.setPreferredSize(new Dimension(width,height));
@@ -31,6 +33,11 @@ public class GamePanel extends JPanel implements Runnable{
         this.setFocusable(true);
         this.setFocusTraversalKeysEnabled(false);
 
+        al = new MyActionListener();
+
+ //       rP = new RetryPanel();
+   //     rP.addButton(al);
+
         main = new Thread(this);
         main.start();
     }
@@ -43,6 +50,28 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2d = (Graphics2D) g;
         dB.drawBoard(g2d);
+        if(eB.gameOver) {
+            defeatScreen(g2d);
+            //rP.drawRetry(g2d);
+//            rP.drawRetry(g2d, al);
+            this.add(rP);
+        }
+    }
+
+    private void resetGame()
+    {
+        this.remove(rP);
+         b = new Board();
+        dB.setNewBoard(b);
+        eB = new BoardEditor(b);
+        eB.make_new_piece();
+    }
+
+    private void defeatScreen(Graphics2D g)
+    {
+
+        rP = new RetryPanel();
+        rP.drawRetry(g, al);
 
     }
 
@@ -60,7 +89,9 @@ public class GamePanel extends JPanel implements Runnable{
             lastTime = now;
             if(delta >= 1)
             {
-                eB.move(0,1);
+                if(!eB.gameOver)
+                    eB.move(0, 1);
+
                 repaint();
                 delta--;
             }
@@ -113,7 +144,16 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-
+    class MyActionListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+                if(e.getActionCommand() == "RETRY")
+                { resetGame();
+                    System.out.print("YWT");
+                }
+        }
+    }
 
 
 

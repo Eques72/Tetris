@@ -7,10 +7,12 @@ public class BoardEditor {
     final char piece_sym = '%';
     final char empty_sym = ' ';
     final char border_sym = '#';
+    public boolean gameOver;
 
     public BoardEditor(Board b)
     {
         board = b;
+        gameOver = false;
     }
 
     public void make_new_piece() //(int x, int y, char type)
@@ -36,9 +38,17 @@ public class BoardEditor {
                     board.map[j+i*board.boardWidth+ piece.x+piece.y*board.boardWidth] = empty_sym;
     }
 
+    public void isGameOver()
+    {
+        for(int q = 0; q < board.boardWidth; q++)
+            if(board.map[q] == piece_sym) {
+                gameOver = true;
+            }
+    }
+
     public boolean move(int x, int y)
     {
-        if(collisions(x,y))
+        if(collisions(x,y) || gameOver)
         {
             x = 0; y = 0;
             return false;
@@ -92,11 +102,14 @@ public class BoardEditor {
                 for(int q = 0; q < coll_tab.length; q++)
                     if(coll_tab[q] != -1 &&
                             ( board.map[(piece.y+coll_tab[q]+y)*board.boardWidth+(piece.x+q)] == piece_sym
-                                || board.map[(piece.y+coll_tab[q]+y)*board.boardWidth+(piece.x+q)] == border_sym) )
-                    {
+                                || board.map[(piece.y+coll_tab[q]+y)*board.boardWidth+(piece.x+q)] == border_sym) ) {
                         insert_piece();
-                        removeLine();
-                        make_new_piece();
+                        isGameOver();
+                        if(!gameOver)
+                        {
+                            removeLine();
+                            make_new_piece();
+                        }
                         return true;
                     }
            }

@@ -23,9 +23,9 @@ private String str_map =     "############" +
                             "#          #" +
                             "#          #" +
                             "############";
-    public int boardWidth = 12;
-    public int boardHeight = 22;
-    public int tileSize = 30; //px DEFAULT = 20
+    public static int boardWidth = 12;
+    public static int boardHeight = 22;
+    public static int tileSize = 30; //px DEFAULT = 20
     public char[] map;
     public Board() { map = str_map.toCharArray(); }
 

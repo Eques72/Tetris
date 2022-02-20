@@ -14,6 +14,8 @@ public class BoardDrafter {
 
     }
 
+    public void setNewBoard(Board new_board) { board = new_board; }
+
     public void drawBoard(Graphics2D g)
     {
         for(int q = 0; q < board.boardHeight; q++) //pieces

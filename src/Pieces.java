@@ -2,13 +2,13 @@ import java.util.Arrays;
 
 public class Pieces {
 
-    private short[][] matrixI = { {0,0,0,0},{1,1,1,1},{0,0,0,0},{0,0,0,0}};
-    private short[][] matrixL = { {0,0,1},{1,1,1},{0,0,0}};
-    private short[][] matrixJ = { {1,0,0},{1,1,1},{0,0,0}};
-    private short[][] matrixS = { {0,1,1},{1,1,0},{0,0,0}};
-    private short[][] matrixZ = { {1,1,0},{0,1,1},{0,0,0}};
-    private short[][] matrixT = { {0,1,0},{1,1,1},{0,0,0}};
-    private short[][] matrixO = { {1,1},{1,1} };
+    private final short[][] matrixI = { {0,0,0,0},{1,1,1,1},{0,0,0,0},{0,0,0,0}};
+    private final short[][] matrixL = { {0,0,1},{1,1,1},{0,0,0}};
+    private final short[][] matrixJ = { {1,0,0},{1,1,1},{0,0,0}};
+    private final short[][] matrixS = { {0,1,1},{1,1,0},{0,0,0}};
+    private final short[][] matrixZ = { {1,1,0},{0,1,1},{0,0,0}};
+    private final short[][] matrixT = { {0,1,0},{1,1,1},{0,0,0}};
+    private final short[][] matrixO = { {1,1},{1,1} };
 
     public static char[] types = {'L','I','O','J','S','Z','T'};
     public short[][] matrix;
@@ -16,54 +16,37 @@ public class Pieces {
     public int x; //is a position on the board where 0 is left border
     public int y; //is a position on the board where 0.0 is top border
     public char type;
-    public int width; //position of outmost '1' to the right in matrix
-    public int height;//position of outmost '1' to the bottom in matrix
 
     public Pieces(int _x, int _y, char _type)
     { x = _x; y = _y; type = _type;
         switch (type) {
-            case 'I' -> {
+            case 'I' ->
                 matrix = matrixI;
-                width = 3;
-                height = 1;
-            }
-            case 'L' -> {
+
+            case 'L' ->
                 matrix = matrixL;
-                width = 2;
-                height = 1;
-            }
-            case 'O' -> {
+
+            case 'O' ->
                 matrix = matrixO;
-                width = 1;
-                height = 1;
-            }
-            case 'J' -> {
+
+            case 'J' ->
                 matrix = matrixJ;
-                width = 2;
-                height = 1;
-            }
-            case 'S' -> {
+
+            case 'S' ->
                 matrix = matrixS;
-                width = 2;
-                height = 1;
-            }
-            case 'Z' -> {
+
+            case 'Z' ->
                 matrix = matrixZ;
-                width = 2;
-                height = 1;
-            }
-            case 'T' -> {
+
+            case 'T' ->
                 matrix = matrixT;
-                width = 2;
-                height = 1;
-            }
         }
     }
 
     public void move(int _x, int _y) //distance is a number of squares on the Board
     { y += _y; x+= _x; }
 
-    public int[] getLowerBlocks()
+    public int[] getLowerProjection()
     {
         int[] collision_table = new int[matrix.length];
         Arrays.fill(collision_table, -1);
@@ -76,34 +59,85 @@ public class Pieces {
         return collision_table;
     }
 
+    public int[] getLeftSideProjection()
+    {
+        int[] collision_table = new int[matrix.length];
+        Arrays.fill(collision_table, -1);
+
+        for(int q = 0; q < matrix.length; q++)
+        {
+            int w = 0;
+            while(w < matrix[q].length && matrix[q][w] == 0)
+                w++;
+
+            if(w < matrix[q].length)
+            collision_table[q] = w;
+        }
+        return collision_table;
+    }
+
+    public int[] getRightSideProjection()
+    {
+        int[] collision_table = new int[matrix.length];
+        Arrays.fill(collision_table, -1);
+
+        for(int q = 0; q < matrix.length; q++)
+        {
+            int w = matrix.length-1;
+            while(w >= 0 && matrix[q][w] != 1)
+                --w;
+
+            if(w >= 0)
+                collision_table[q] = w;
+        }
+        return collision_table;
+    }
+
     public void rotate()
     {
         if(type == 'O')
             return;
         short[][] tmp_matrix;
-        if(type == 'I')
-            tmp_matrix = new short[][]{ {0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
+        if(type == 'I') {
+            tmp_matrix = new short[][]
+                    {{0, 0, 0, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0},
+                    {0, 0, 0, 0}};
+            for (short i = 0; i < matrix.length; i++)
+                for (short j = 0; j < matrix[i].length; j++)
+                    tmp_matrix[j][i] = matrix[i][j];
+            short[][] diagonl_matrix =
+                             {{0, 0, 0, 1},
+                            {0, 0, 1, 0},
+                            {0, 1, 0, 0},
+                            {1, 0, 0, 0}};
+            for (short i = 0; i < matrix.length; i++)
+                for (short j = 0; j < matrix[i].length; j++)
+            matrix[i][j] = (short) (tmp_matrix[i][0] * diagonl_matrix[0][j] +
+                    tmp_matrix[i][1] * diagonl_matrix[1][j] + tmp_matrix[i][2] * diagonl_matrix[2][j] +
+                    tmp_matrix[i][3] * diagonl_matrix[3][j]);
+        }
         else
-            tmp_matrix = new short[][]{ {0,0,0},{0,0,0},{0,0,0} };
+        {
+            tmp_matrix = new short[][]{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 
-        for(short i = 0; i < matrix.length; i++)
-            for(short j = 0; j < matrix[i].length; j++)
-                if(matrix[i][j] == 1)
-                {
-                   int indexY = i-1 ;
-                    int indexX = j-1 ;
+            for (short i = 0; i < matrix.length; i++)
+                for (short j = 0; j < matrix[i].length; j++)
+                    if (matrix[i][j] == 1) {
+                        int indexY = i - 1;
+                        int indexX = j - 1;
 
-                    int tmp = indexY;
-                    indexY = indexX;
-                    indexX = tmp;
+                        int tmp = indexY;
+                        indexY = indexX;
+                        indexX = tmp;
 
-                    indexX *= -1;
-                    indexX++;
-                    indexY++;
-                    tmp_matrix[indexY][indexX] = 1;
-                }
-
-        matrix = tmp_matrix;
-
+                        indexX *= -1;
+                        indexX++;
+                        indexY++;
+                        tmp_matrix[indexY][indexX] = 1;
+                    }
+            matrix = tmp_matrix;
+        }
     }
 }

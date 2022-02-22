@@ -18,50 +18,50 @@ public class BoardDrafter {
 
     public void drawBoard(Graphics2D g)
     {
-        for(int q = 0; q < board.boardHeight; q++) //pieces
-            for(int w = 0; w < board.boardWidth; w++)
-                if(board.map[(q*board.boardWidth) + w] == '%') {
+        for(int q = 0; q < Board.boardHeight; q++) //pieces
+            for(int w = 0; w < Board.boardWidth; w++)
+                if(board.map[(q* Board.boardWidth) + w] == '%') {
                     g.drawImage(
-                            sprites, w * board.tileSize, q * board.tileSize,
-                            w * board.tileSize + board.tileSize, q * board.tileSize + board.tileSize,
+                            sprites, w * Board.tileSize, q * Board.tileSize,
+                            w * Board.tileSize + Board.tileSize, q * Board.tileSize + Board.tileSize,
                             6 * 20, 0, 20 * 7, 20, iO);
                 }
 
 
             g.drawImage(    //draws left border
-                    sprites, 0, board.tileSize,
-                     board.tileSize, (board.boardHeight-1) * board.tileSize,
+                    sprites, 0, Board.tileSize,
+                    Board.tileSize, (Board.boardHeight -1) * Board.tileSize,
                     20 * 5, 0, 20 * 6, 20, iO);
             g.drawImage(    //draws right border
-                    sprites, (board.boardWidth-1) * board.tileSize, board.tileSize,
-                    board.boardWidth * board.tileSize, (board.boardHeight-1) * board.tileSize,
+                    sprites, (Board.boardWidth -1) * Board.tileSize, Board.tileSize,
+                    Board.boardWidth * Board.tileSize, (Board.boardHeight -1) * Board.tileSize,
                     20 * 5, 0, 20 * 6, 20, iO);
 
             g.drawImage(    //draws top border
-                    sprites, board.tileSize, 0,
-                    (board.boardWidth-1) * board.tileSize, board.tileSize,
+                    sprites, Board.tileSize, 0,
+                    (Board.boardWidth -1) * Board.tileSize, Board.tileSize,
                     20*4, 0,20*5,20, iO);
             g.drawImage(    //draws bottom border
-                    sprites, board.tileSize, board.tileSize * (board.boardHeight-1),
-                    (board.boardWidth-1)* board.tileSize, board.tileSize * board.boardHeight,
+                    sprites, Board.tileSize, Board.tileSize * (Board.boardHeight -1),
+                    (Board.boardWidth -1)* Board.tileSize, Board.tileSize * Board.boardHeight,
                     20*4, 0,20*5,20, iO);
 
 
                         g.drawImage(    //draws top left corner
                                 sprites, 0,0,
-                                board.tileSize,board.tileSize,
+                                Board.tileSize, Board.tileSize,
                                 0, 0,20,20, iO);
                         g.drawImage(    //draws top right corner
-                                sprites, (board.boardWidth-1)*board.tileSize,0,
-                                board.boardWidth*board.tileSize,board.tileSize,
+                                sprites, (Board.boardWidth -1)* Board.tileSize,0,
+                                Board.boardWidth * Board.tileSize, Board.tileSize,
                                 20, 0,20*2,20, iO);
                         g.drawImage(    //draws bottom right corner
-                                sprites, (board.boardWidth-1)*board.tileSize,(board.boardHeight-1)*board.tileSize,
-                                board.boardWidth*board.tileSize,board.boardHeight*board.tileSize,
+                                sprites, (Board.boardWidth -1)* Board.tileSize,(Board.boardHeight -1)* Board.tileSize,
+                                Board.boardWidth * Board.tileSize, Board.boardHeight * Board.tileSize,
                             3*20, 0,20*4,20, iO);
                         g.drawImage(    //draws bottom left corner
-                                sprites, 0,(board.boardHeight-1)*board.tileSize,
-                                board.tileSize,board.boardHeight*board.tileSize,
+                                sprites, 0,(Board.boardHeight -1)* Board.tileSize,
+                                Board.tileSize, Board.boardHeight * Board.tileSize,
                                 2*20, 0,20*3,20, iO);
 
 

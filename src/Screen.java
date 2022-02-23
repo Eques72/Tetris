@@ -4,8 +4,6 @@ import java.awt.*;
 public class Screen extends JFrame {
 
     GamePanel gP;
-//    Image icon;
-//    static final String iconFile = "resources/TetrisLogo.png";
 
     Screen()
     {
@@ -18,9 +16,6 @@ public class Screen extends JFrame {
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-
-   //     icon = Toolkit.getDefaultToolkit().createImage(iconFile);
-   //     this.setIconImage(icon); // stops keyListener from working for some reason
         this.setTitle("Tetris");
 
         this.add(gP);

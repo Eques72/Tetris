@@ -20,7 +20,16 @@ public class BoardEditor {
     public void make_new_piece() //(int x, int y, char type)
     {
         Random rd = new Random();
-        piece = new Pieces(rd.nextInt(8)+1,0, Pieces.types[rd.nextInt(7)]);
+        int bound = Board.boardWidth-4;
+        int starting_pos = 0;
+
+        char type = Pieces.types[rd.nextInt(7)];
+        if(type == Pieces.types[1]) {
+            --bound;
+            --starting_pos;
+        }
+
+        piece = new Pieces(rd.nextInt(bound)+1,starting_pos, type);
         insert_piece();
     }
 

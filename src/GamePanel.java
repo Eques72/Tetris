@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Random;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -142,33 +142,21 @@ public class GamePanel extends JPanel implements Runnable{
 
         @Override
         public void keyPressed(KeyEvent e) {
-            switch (e.getKeyCode())
-            {
-                case 65: case 37:
-                        {
-                            eB.move(-1, 0);
-                            repaint();
-                            break;
-                        }
-                case 68: case 39:
-                        {
-                            eB.move(1, 0);
-                            repaint();
-                            break;
-                        }
-                case 87: case 38 :
-                        {
-                            eB.rotate();
-                            repaint();
-                            break;
-                        }
-                case 40: case 83 :
-                        {
-                            eB.fall();
-                            //TO DO
-                           // block.speed_up(true);
-                            break;
-                        }
+            switch (e.getKeyCode()) {
+                case 65, 37 -> {
+                    eB.move(-1, 0);
+                    repaint();
+                }
+                case 68, 39 -> {
+                    eB.move(1, 0);
+                    repaint();
+                }
+                case 87, 38 -> {
+                    eB.rotate();
+                    repaint();
+                }
+                case 40, 83 ->
+                    eB.fall();
             }
         }
 
@@ -183,7 +171,7 @@ public class GamePanel extends JPanel implements Runnable{
     {
         @Override
         public void actionPerformed(ActionEvent e) {
-                if(e.getActionCommand() == "RETRY")
+                if(Objects.equals(e.getActionCommand(), "RETRY"))
                 { resetGame();
                     System.out.print("YWT");
                 }

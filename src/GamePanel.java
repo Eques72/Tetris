@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Objects;
 
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel extends JPanel implements Runnable {
 
     static final int width = 360;//320; //px
     static final int height = 660;//650;
@@ -25,10 +25,10 @@ public class GamePanel extends JPanel implements Runnable{
     boolean is_game_running;
 
     GamePanel(Screen screen) {
-        this.setPreferredSize(new Dimension(width,height));
+        this.setPreferredSize(new Dimension(width, height));
         this.setLayout(null);
 
-        b= new Board();
+        b = new Board();
         dB = new BoardDrafter(b);
         score = new Score();
         eB = new BoardEditor(b, score);
@@ -44,8 +44,8 @@ public class GamePanel extends JPanel implements Runnable{
 
         setIcon(screen);
 
- //       rP = new RetryPanel();
-   //     rP.addButton(al);
+        //       rP = new RetryPanel();
+        //     rP.addButton(al);
         is_game_running = true;
         main = new Thread(this);
         main.start();
@@ -60,12 +60,12 @@ public class GamePanel extends JPanel implements Runnable{
 
     @Override
     public void paint(Graphics g) {
-        g.setColor(new Color(48,18,38));
-        g.fillRect(0,0,width,height);
+        g.setColor(new Color(48, 18, 38));
+        g.fillRect(0, 0, width, height);
 
         Graphics2D g2d = (Graphics2D) g;
         dB.drawBoard(g2d);
-        if(eB.gameOver) {
+        if (eB.gameOver) {
 //            defeatScreen(g2d);
 //            //rP.drawRetry(g2d);
             rP.drawRetry(g2d, al);
@@ -74,32 +74,29 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-    private void resetGame()
-    {
+    private void resetGame() {
 
         this.remove(rP);
-         b = new Board();
+        b = new Board();
         dB.setNewBoard(b);
         eB = new BoardEditor(b, score);
         eB.make_new_piece();
     }
 
-    private void defeatScreen(Graphics2D g)
-    {
+    private void defeatScreen(Graphics2D g) {
         rP = new RetryPanel(this);
         //rP = new RetryPanel();
         rP.drawRetry(g, al);
 
     }
 
-    private void defeat()
-    {
+    private void defeat() {
         rP = new RetryPanel(this);
         this.add(rP);
 
         JButton b = new JButton("RETRY");
 
-        b.setBounds(GamePanel.width/2-50,GamePanel.height/2+100,100,100);
+        b.setBounds(GamePanel.width / 2 - 50, GamePanel.height / 2 + 100, 100, 100);
         b.addActionListener(al);
         //this.add(b);
         this.add(b);
@@ -108,24 +105,21 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         long lastTime = System.nanoTime();
         double amountOfTicks = 1;//60.0;
         double nanoSec = 1000000000 / amountOfTicks;
         double delta = 0;
-        while(is_game_running)
-        {
+        while (is_game_running) {
             long now = System.nanoTime();
-            delta += (now - lastTime)/nanoSec;
+            delta += (now - lastTime) / nanoSec;
             lastTime = now;
-            if(delta >= 1)
-            {
-                if(!eB.gameOver)
+            if (delta >= 1) {
+                if (!eB.gameOver)
                     eB.move(0, 1);
                 else
                     is_game_running = false;
-                    defeat();
+                defeat();
 
                 repaint();
                 delta--;
@@ -133,8 +127,7 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-    class MyKeyListener implements KeyListener
-    {
+    class MyKeyListener implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {
 
@@ -155,8 +148,7 @@ public class GamePanel extends JPanel implements Runnable{
                     eB.rotate();
                     repaint();
                 }
-                case 40, 83 ->
-                    eB.fall();
+                case 40, 83 -> eB.fall();
             }
         }
 
@@ -167,20 +159,15 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-    class MyActionListener implements ActionListener
-    {
+    class MyActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-                if(Objects.equals(e.getActionCommand(), "RETRY"))
-                { resetGame();
-                    System.out.print("YWT");
-                }
+            if (Objects.equals(e.getActionCommand(), "RETRY")) {
+                resetGame();
+                System.out.print("YWT");
+            }
         }
     }
-
-
-
-
 
 
 }

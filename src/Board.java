@@ -1,51 +1,53 @@
-public class Board
-{
-private final String str_map =     "############" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "#          #" +
-                            "############";
+public class Board {
     public static int boardWidth = 12;
     public static int boardHeight = 22;
     public static int tileSize = 30; //px DEFAULT = 20
+    private final String str_map =
+            "############" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "#          #" +
+            "############";
     public char[] map;
-    public Board() { map = str_map.toCharArray(); }
+
+    public Board() {
+        map = str_map.toCharArray();
+    }
 
     public int checkLines() {
         int len = 0;
         int pos = -1;
-        for (int q = 0; q < map.length; q++)
-        {       if (map[q] == '%' && pos == -1 && (q-1)%boardWidth == 0) {
+        for (int q = 0; q < map.length; q++) {
+            if (map[q] == '%' && pos == -1 && (q - 1) % boardWidth == 0) {
                 len++;
                 pos = q;
-            }
-            else if (map[q] == '%' && pos != -1)
+            } else if (map[q] == '%' && pos != -1)
                 len++;
             else {
                 len = 0;
                 pos = -1;
             }
-            if (len == boardWidth-2)
-            break;
+            if (len == boardWidth - 2)
+                break;
         }
-            return pos;
+        return pos;
     }
 
 

@@ -1,9 +1,7 @@
-public class Main
-{
+public class Main {
 
-    public static void main(String[] args)
-    {
-       Screen sc = new Screen();
+    public static void main(String[] args) {
+        Screen sc = new Screen();
 
     }
 }

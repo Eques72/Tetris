@@ -5,8 +5,7 @@ public class Screen extends JFrame {
 
     GamePanel gP;
 
-    Screen()
-    {
+    Screen() {
         gP = new GamePanel(this);
 
         this.setSize(new Dimension(gP.getWidth(), gP.getHeight()));
